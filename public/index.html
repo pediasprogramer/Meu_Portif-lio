@@ -22,7 +22,7 @@
         :root {
             --bg-dark: #0A0A0A;
             --bg-light: #F7F7F7;
-            --card-dark: #171717;
+            --card-dark: #121212;
             --card-light: #FFFFFF;
             --text-dark: #E5E5E5;
             --text-light: #171717;
@@ -32,6 +32,7 @@
             --border-light: #E5E5E5;
             --accent: #3B82F6;
             --accent-hover: #2563EB;
+            --accent-glow: rgba(59, 130, 246, 0.4);
         }
 
         html { scroll-behavior: smooth; }
@@ -52,29 +53,38 @@
         .light-mode .nav-link { color: var(--text-light); }
         .light-mode .nav-link:hover { color: var(--accent); }
         .light-mode .hero-overlay { background: rgba(247, 247, 247, 0.6); }
-        .light-mode .hero-content h1, .light-mode .hero-content p { color: var(--text-light); }
+        .light-mode .hero-content h1 { color: #1e3a8a; } /* Cor sólida para gradiente em light-mode */
+        .light-mode .hero-content p { color: var(--text-light); }
         .light-mode .project-card, .light-mode .faq-item, .light-mode .contact-form, .light-mode .modal-content { background-color: var(--card-light); border-color: var(--border-light); }
         .light-mode .filter-btn { background-color: #E5E7EB; color: #374151; }
         .light-mode .filter-btn.active { background-color: var(--accent); color: white; }
         .light-mode .cookie-banner { background-color: var(--card-light); }
-        .light-mode footer { background-color: #E5E5E5; }
+        .light-mode footer { background-color: #F3F4F6; }
         .light-mode footer p { color: var(--text-muted-light); }
         .light-mode footer a { color: var(--accent); }
         .light-mode input, .light-mode textarea, .light-mode select { background-color: #F3F4F6; color: var(--text-light); border-color: #D1D5DB; }
         .light-mode input::placeholder, .light-mode textarea::placeholder { color: #9CA3AF; }
         .light-mode .text-gray-400 { color: var(--text-muted-light); }
-        .light-mode .bg-neutral-800, .light-mode .bg-neutral-700, .light-mode .bg-neutral-900, .light-mode .bg-neutral-900 { background-color: #F0F0F0; }
+        .light-mode .bg-neutral-900\/50, .light-mode .bg-neutral-800, .light-mode .bg-neutral-700, .light-mode .bg-neutral-900 { background-color: #F9FAFB; }
         .light-mode .border-neutral-800, .light-mode .border-neutral-700 { border-color: var(--border-light); }
+        .light-mode .badge { background-color: #DBEAFE; color: #1E40AF; }
+        .light-mode .project-card:hover { box-shadow: 0 0 25px var(--accent-glow), 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+
 
         /* --- Componentes e Animações --- */
-        header { background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-dark); }
+        header { background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-dark); }
         .hero { min-height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .hero-video { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); z-index: -1; }
-        .hero-overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 0; }
+        .hero-video { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); z-index: -1; filter: brightness(0.6); }
+        .hero-overlay { position: absolute; inset: 0; background: transparent; z-index: 0; }
         .hero-content { position: relative; z-index: 1; }
+        .hero-content h1 { text-shadow: 0 4px 15px rgba(0,0,0,0.4); }
 
-        .project-card { border: 1px solid var(--border-dark); transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .project-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); }
+        .project-card { background-color: var(--card-dark); border: 1px solid var(--border-dark); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 25px var(--accent-glow), 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            border-color: var(--accent);
+        }
         
         .modal { display: none; animation: fadeIn 0.3s ease-out; }
         .modal-content { animation: slideIn 0.4s ease-out; background-color: var(--card-dark); }
@@ -90,89 +100,34 @@
             to { opacity: 1; transform: translate(-50%, 0); }
         }
 
+        /* --- FAQ --- */
+        details summary { list-style: none; } /* Remove a seta padrão */
+        details summary::-webkit-details-marker { display: none; } /* Remove a seta padrão no Chrome */
+        details[open] summary ~ * { animation: fadeInContent 0.5s ease-out; }
+        details[open] .faq-arrow { transform: rotate(180deg); }
+        @keyframes fadeInContent { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
         /* --- Seletor de Tema Animado --- */
-        .theme-switch-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .theme-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-        .theme-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #374151;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-            z-index: 2;
-        }
-        input:checked + .slider {
-            background-color: #3B82F6;
-        }
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-        .theme-icon-container {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 7px;
-        }
-        .theme-icon {
-            width: 18px;
-            height: 18px;
-            transition: transform 0.4s ease, opacity 0.4s ease;
-            color: #FBBF24;
-        }
-        .sun-icon {
-            opacity: 0;
-            transform: rotate(90deg) scale(0);
-        }
-        .moon-icon {
-            opacity: 1;
-            transform: rotate(0) scale(1);
-        }
-        input:checked ~ .theme-icon-container .sun-icon {
-            opacity: 1;
-            transform: rotate(0) scale(1);
-        }
-        input:checked ~ .theme-icon-container .moon-icon {
-            opacity: 0;
-            transform: rotate(-90deg) scale(0);
-        }
+        .theme-switch-wrapper { display: flex; align-items: center; gap: 10px; }
+        .theme-switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .theme-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #374151; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; z-index: 2; }
+        input:checked + .slider { background-color: #3B82F6; }
+        input:checked + .slider:before { transform: translateX(26px); }
+        .theme-icon-container { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 7px; }
+        .theme-icon { width: 18px; height: 18px; transition: transform 0.4s ease, opacity 0.4s ease; color: #FBBF24; }
+        .sun-icon { opacity: 0; transform: rotate(90deg) scale(0); }
+        .moon-icon { opacity: 1; transform: rotate(0) scale(1); }
+        input:checked ~ .theme-icon-container .sun-icon { opacity: 1; transform: rotate(0) scale(1); }
+        input:checked ~ .theme-icon-container .moon-icon { opacity: 0; transform: rotate(-90deg) scale(0); }
     </style>
 </head>
 <body class="antialiased">
     
     <header class="fixed w-full z-50 transition-colors duration-300">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#home" class="text-2xl font-bold tracking-tight">Pedro Dias</a>
+            <a href="#home" class="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">Pedro Dias</a>
             <div class="hidden md:flex items-center space-x-8">
                 <a href="#sobre" class="nav-link text-gray-300 hover:text-white transition duration-300">Sobre</a>
                 <a href="#projetos" class="nav-link text-gray-300 hover:text-white transition duration-300">Projetos</a>
@@ -200,26 +155,26 @@
             </video>
             <div class="hero-overlay"></div>
             <div class="hero-content container mx-auto px-6 text-center" data-aos="fade-up">
-                <h1 id="titulo" class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-4">Pedro Dias Pereira Neto</h1>
-                <p id="descricao" class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8">Especialista em Tecnologia e Análise de Dados</p>
-                <a href="#contato" class="bg-blue-600 text-white px-8 py-3 rounded-md font-semibold text-lg hover:bg-accent-hover transition duration-300 shadow-lg shadow-blue-600/30">Entre em Contato</a>
+                <h1 id="titulo" class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-br from-blue-400 to-cyan-400">Pedro Dias Pereira Neto</h1>
+                <p id="descricao" class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-10">Especialista em Tecnologia e Análise de Dados Transformando Ideias em Realidade Digital</p>
+                <a href="#contato" class="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-md font-semibold text-lg hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transform hover:scale-105">Entre em Contato</a>
             </div>
         </section>
 
         <section id="sobre" class="container mx-auto px-6 py-20 md:py-28">
-            <div class="max-w-3xl mx-auto text-center">
+            <div class="max-w-4xl mx-auto text-center">
                 <h2 class="text-3xl md:text-4xl font-bold mb-6" data-aos="fade-up">Sobre Mim</h2>
-                <div class="text-gray-400 space-y-4 text-lg" data-aos="fade-up" data-aos-delay="100">
+                <div class="text-gray-400 space-y-5 text-lg leading-relaxed" data-aos="fade-up" data-aos-delay="100">
                     <p id="sobre-texto">Sou um desenvolvedor e analista de dados com vasta experiência em criar soluções inovadoras que transformam ideias em resultados concretos. Minha expertise abrange desenvolvimento web, backend robusto e análise de dados avançada, sempre buscando entregar projetos de alto impacto.</p>
                     <p>Fora do código, dedico-me a explorar as últimas tecnologias, contribuir para comunidades open-source e planejar estratégias que maximizam o potencial de cada iniciativa.</p>
                 </div>
             </div>
         </section>
 
-        <section id="projetos" class="py-20 md:py-28 bg-neutral-900/50">
+        <section id="projetos" class="py-20 md:py-28 bg-black/20">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" data-aos="fade-up">Meus Projetos</h2>
-                <div class="flex justify-center flex-wrap gap-3 mb-10" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex justify-center flex-wrap gap-3 mb-12" data-aos="fade-up" data-aos-delay="100">
                     <button class="filter-btn px-4 py-2 rounded-md bg-neutral-800 hover:bg-neutral-700 transition text-sm font-medium active" data-category="all">Todos</button>
                     <button class="filter-btn px-4 py-2 rounded-md bg-neutral-800 hover:bg-neutral-700 transition text-sm font-medium" data-category="web">Web</button>
                     <button class="filter-btn px-4 py-2 rounded-md bg-neutral-800 hover:bg-neutral-700 transition text-sm font-medium" data-category="mobile">Mobile</button>
@@ -232,41 +187,50 @@
 
         <section id="contato" class="container mx-auto px-6 py-20 md:py-28">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" data-aos="fade-up">Entre em Contato</h2>
-            <form id="contact-form" class="max-w-xl mx-auto contact-form p-8 rounded-lg border border-neutral-800" data-aos="fade-up" data-aos-delay="100">
+            <form id="contact-form" class="max-w-xl mx-auto contact-form p-8 rounded-lg border border-neutral-800 bg-neutral-900/50" data-aos="fade-up" data-aos-delay="100">
                 <div class="mb-5">
-                    <label for="from_name" class="block font-medium text-sm mb-2">Nome ou Empresa</label>
-                    <input type="text" id="from_name" name="from_name" class="w-full p-3 bg-neutral-800 border border-neutral-700 rounded-md focus:border-accent focus:ring-accent transition" placeholder="Seu nome ou empresa" required>
+                    <label for="from_name" class="block font-medium text-sm mb-2 text-gray-300">Nome ou Empresa</label>
+                    <input type="text" id="from_name" name="from_name" class="w-full p-3 bg-neutral-800 border border-neutral-700 rounded-md focus:border-accent focus:ring-2 focus:ring-accent/50 transition" placeholder="Seu nome ou empresa" required>
                 </div>
                 <div class="mb-5">
-                    <label for="reply_to" class="block font-medium text-sm mb-2">Seu E-mail para Contato</label>
-                    <input type="email" id="reply_to" name="reply_to" class="w-full p-3 bg-neutral-800 border border-neutral-700 rounded-md focus:border-accent focus:ring-accent transition" placeholder="exemplo@dominio.com" required>
+                    <label for="reply_to" class="block font-medium text-sm mb-2 text-gray-300">Seu E-mail para Contato</label>
+                    <input type="email" id="reply_to" name="reply_to" class="w-full p-3 bg-neutral-800 border border-neutral-700 rounded-md focus:border-accent focus:ring-2 focus:ring-accent/50 transition" placeholder="exemplo@dominio.com" required>
                 </div>
                 <div class="mb-5">
-                    <label for="subject" class="block font-medium text-sm mb-2">Assunto</label>
-                    <input type="text" id="subject" name="subject" class="w-full p-3 bg-neutral-800 border border-neutral-700 rounded-md focus:border-accent focus:ring-accent transition" placeholder="Assunto da mensagem" required>
+                    <label for="subject" class="block font-medium text-sm mb-2 text-gray-300">Assunto</label>
+                    <input type="text" id="subject" name="subject" class="w-full p-3 bg-neutral-800 border border-neutral-700 rounded-md focus:border-accent focus:ring-2 focus:ring-accent/50 transition" placeholder="Assunto da mensagem" required>
                 </div>
                 <div class="mb-5">
-                    <label for="message" class="block font-medium text-sm mb-2">Mensagem</label>
-                    <textarea id="message" name="message" class="w-full p-3 bg-neutral-800 border border-neutral-700 rounded-md focus:border-accent focus:ring-accent transition" placeholder="Descreva seu objetivo" rows="5" required></textarea>
+                    <label for="message" class="block font-medium text-sm mb-2 text-gray-300">Mensagem</label>
+                    <textarea id="message" name="message" class="w-full p-3 bg-neutral-800 border border-neutral-700 rounded-md focus:border-accent focus:ring-2 focus:ring-accent/50 transition" placeholder="Descreva seu objetivo" rows="5" required></textarea>
                 </div>
-                <button type="submit" id="submit-btn" class="w-full bg-accent text-white py-3 px-6 rounded-md font-semibold hover:bg-accent-hover transition shadow-lg shadow-blue-600/30 disabled:bg-gray-500 disabled:cursor-not-allowed">Enviar Mensagem</button>
+                <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 px-6 rounded-md font-semibold hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transform hover:scale-105 disabled:bg-gray-500 disabled:from-gray-500 disabled:scale-100 disabled:shadow-none disabled:cursor-not-allowed">Enviar Mensagem</button>
             </form>
         </section>
 
-        <section id="faq" class="bg-neutral-900/50 py-20 md:py-28">
+        <section id="faq" class="bg-black/20 py-20 md:py-28">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" data-aos="fade-up">Perguntas Frequentes</h2>
                 <div class="max-w-3xl mx-auto space-y-4" data-aos="fade-up" data-aos-delay="100">
-                    <details class="faq-item p-6 rounded-lg border border-neutral-800 cursor-pointer">
-                        <summary class="text-lg font-semibold">Como contratar seus serviços?</summary>
+                    <details class="faq-item p-6 rounded-lg border border-neutral-800 cursor-pointer transition-all duration-300 hover:border-accent/50 bg-neutral-900/50">
+                        <summary class="flex justify-between items-center text-lg font-semibold">
+                            Como contratar seus serviços?
+                            <svg class="faq-arrow w-5 h-5 transition-transform duration-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                        </summary>
                         <p class="mt-4 text-gray-400">Preencha o formulário de contato com seu objetivo e meio de contato preferido para receber uma cotação personalizada e detalhada.</p>
                     </details>
-                    <details class="faq-item p-6 rounded-lg border border-neutral-800 cursor-pointer">
-                        <summary class="text-lg font-semibold">Quais tecnologias você utiliza?</summary>
+                    <details class="faq-item p-6 rounded-lg border border-neutral-800 cursor-pointer transition-all duration-300 hover:border-accent/50 bg-neutral-900/50">
+                        <summary class="flex justify-between items-center text-lg font-semibold">
+                            Quais tecnologias você utiliza?
+                             <svg class="faq-arrow w-5 h-5 transition-transform duration-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                        </summary>
                         <p class="mt-4 text-gray-400">Utilizo tecnologias de ponta como React, Node.js, Flutter, Tailwind CSS e outras para garantir desenvolvimento de alta qualidade e inovação.</p>
                     </details>
-                    <details class="faq-item p-6 rounded-lg border border-neutral-800 cursor-pointer">
-                        <summary class="text-lg font-semibold">Qual o prazo para um projeto?</summary>
+                    <details class="faq-item p-6 rounded-lg border border-neutral-800 cursor-pointer transition-all duration-300 hover:border-accent/50 bg-neutral-900/50">
+                        <summary class="flex justify-between items-center text-lg font-semibold">
+                            Qual o prazo para um projeto?
+                             <svg class="faq-arrow w-5 h-5 transition-transform duration-300 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                        </summary>
                         <p class="mt-4 text-gray-400">O prazo é definido com base no escopo do projeto. Entre em contato para uma avaliação detalhada e uma estimativa precisa.</p>
                     </details>
                 </div>
@@ -274,32 +238,32 @@
         </section>
     </main>
 
-    <footer class="bg-neutral-900 py-8">
+    <footer class="bg-neutral-900 py-8 border-t border-neutral-800">
         <div class="container mx-auto px-6 text-center text-gray-500">
             <p>© <span id="current-year"></span> Pedro Dias. Todos os direitos reservados.</p>
             <p class="mt-2 text-sm">
-                <a href="mailto:pedrodiasdesenvolvedor123@gmail.com" class="text-gray-400 hover:text-white transition">pedrodiasdesenvolvedor123@gmail.com</a> |
-                <a href="tel:+5561995588809" class="text-gray-400 hover:text-white transition">+55 61 99558-8809</a>
+                <a href="mailto:pedrodiasdesenvolvedor123@gmail.com" class="text-gray-400 hover:text-accent transition">pedrodiasdesenvolvedor123@gmail.com</a> |
+                <a href="tel:+5561995588809" class="text-gray-400 hover:text-accent transition">+55 61 99558-8809</a>
             </p>
         </div>
     </footer>
 
-    <div id="cookie-banner" class="cookie-banner fixed bottom-4 left-4 right-4 md:left-auto max-w-lg bg-neutral-800 p-4 rounded-lg shadow-lg z-50">
+    <div id="cookie-banner" class="cookie-banner fixed bottom-4 left-4 right-4 md:left-auto max-w-lg p-4 rounded-lg shadow-lg z-50 border border-neutral-700">
         <div class="flex items-center justify-between gap-4">
              <p class="text-sm">Utilizamos cookies para aprimorar sua experiência. <a href="#" class="text-blue-400 hover:underline">Saiba mais</a>.</p>
              <div class="flex gap-2">
-                <button class="cookie-btn cookie-accept bg-accent hover:bg-accent-hover text-white px-3 py-1.5 rounded-md text-sm font-medium">Aceitar</button>
-                <button class="cookie-btn cookie-reject bg-neutral-700 hover:bg-neutral-600 text-white px-3 py-1.5 rounded-md text-sm font-medium">Rejeitar</button>
+                <button class="cookie-btn cookie-accept bg-accent hover:bg-accent-hover text-white px-3 py-1.5 rounded-md text-sm font-medium transition">Aceitar</button>
+                <button class="cookie-btn cookie-reject bg-neutral-700 hover:bg-neutral-600 text-white px-3 py-1.5 rounded-md text-sm font-medium transition">Rejeitar</button>
              </div>
         </div>
     </div>
     
     <div id="projectModal" class="modal fixed inset-0 bg-black/80 z-[100] items-center justify-center p-4">
         <div class="modal-content relative p-8 rounded-lg max-w-2xl w-full border border-neutral-700">
-            <button class="close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-2xl">×</button>
-            <h3 id="modalTitle" class="text-2xl font-bold mb-4"></h3>
-            <p id="modalDescription" class="text-gray-300 mb-4"></p>
-            <p id="modalCategory" class="text-sm text-blue-400 font-semibold uppercase tracking-wider"></p>
+            <button class="close-btn absolute top-4 right-4 text-gray-400 hover:text-white transition text-3xl leading-none">&times;</button>
+            <h3 id="modalTitle" class="text-2xl font-bold mb-2"></h3>
+            <p id="modalCategory" class="text-sm text-blue-400 font-semibold uppercase tracking-wider mb-4"></p>
+            <p id="modalDescription" class="text-gray-300"></p>
         </div>
     </div>
     
@@ -368,22 +332,31 @@
 
                 filteredProjects.forEach((project, index) => {
                     const card = document.createElement('div');
-                    card.className = 'project-card p-6 rounded-lg';
+                    card.className = 'project-card p-6 rounded-lg flex flex-col';
                     card.dataset.category = project.category;
                     card.setAttribute('data-aos', 'fade-up');
                     card.setAttribute('data-aos-delay', (index % 3) * 100);
 
+                    const categoryFormatted = project.category.charAt(0).toUpperCase() + project.category.slice(1);
+
                     card.innerHTML = `
-                        <h3 class="text-xl font-bold mb-2">${project.title}</h3>
-                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">${project.description}</p>
-                        <button class="text-blue-500 hover:text-accent-hover font-semibold text-sm view-details-btn">Ver Detalhes →</button>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-xl font-bold text-gray-100">${project.title}</h3>
+                                <span class="badge bg-blue-900/50 text-blue-300 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap">${categoryFormatted}</span>
+                            </div>
+                            <p class="text-gray-400 mb-6 text-sm leading-relaxed">${project.description}</p>
+                        </div>
+                        <button class="text-blue-400 hover:text-blue-300 font-semibold text-sm view-details-btn group self-start transition-all duration-300">
+                            Ver Detalhes <span class="group-hover:ml-1 transition-all duration-300 inline-block">→</span>
+                        </button>
                     `;
                     projectGrid.appendChild(card);
 
                     card.querySelector('.view-details-btn').addEventListener('click', () => {
                         modalTitle.textContent = project.title;
                         modalDescription.textContent = project.description;
-                        modalCategory.textContent = `Categoria: ${project.category.charAt(0).toUpperCase() + project.category.slice(1)}`;
+                        modalCategory.textContent = `Categoria: ${categoryFormatted}`;
                         modal.style.display = 'flex';
                     });
                 });
@@ -403,6 +376,9 @@
             closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
             window.addEventListener('click', (event) => {
                 if (event.target === modal) modal.style.display = 'none';
+            });
+             window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.style.display === 'flex') modal.style.display = 'none';
             });
             
             // --- LÓGICA DO TEMA ---
@@ -443,23 +419,27 @@
             const contactForm = document.getElementById('contact-form');
             const successMessage = document.getElementById('success-message');
             
-            const SERVICE_ID = 'SEU_SERVICE_ID';
-            const TEMPLATE_ID = 'SEU_TEMPLATE_ID';
-            const PUBLIC_KEY = 'SUA_PUBLIC_KEY';
+            // SUAS CREDENCIAIS FORAM INSERIDAS AQUI
+            const SERVICE_ID = 'service_le204os';
+            const TEMPLATE_ID = 'template_iylqvhk';
+            const PUBLIC_KEY = 'YZ3lxv3ex1v9zZmXH';
 
             contactForm.addEventListener('submit', function(event) {
                 event.preventDefault();
 
-                if (SERVICE_ID === 'SEU_SERVICE_ID' || TEMPLATE_ID === 'SEU_TEMPLATE_ID' || PUBLIC_KEY === 'SUA_PUBLIC_KEY') {
-                    alert('ERRO: Configure suas chaves do EmailJS no código para que o formulário de contato funcione.');
+                // Verificação para garantir que as chaves não estão mais como placeholders
+                if (SERVICE_ID.includes('SEU_') || TEMPLATE_ID.includes('SEU_') || PUBLIC_KEY.includes('SUA_')) {
+                    alert('ERRO: Parece que as chaves do EmailJS não foram configuradas corretamente.');
                     return;
                 }
+                
+                emailjs.init(PUBLIC_KEY);
 
                 const submitButton = document.getElementById('submit-btn');
                 submitButton.disabled = true;
                 submitButton.textContent = 'Enviando...';
 
-                emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, this, PUBLIC_KEY)
+                emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, this)
                     .then(() => {
                         successMessage.style.display = 'block';
                         contactForm.reset();
@@ -467,7 +447,7 @@
                             successMessage.style.display = 'none';
                         }, 4000);
                     }, (err) => {
-                        alert('Ocorreu um erro. Tente novamente.\n' + JSON.stringify(err));
+                        alert('Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente.\n\nDetalhes do erro: ' + JSON.stringify(err));
                     })
                     .finally(() => {
                         submitButton.disabled = false;
@@ -478,7 +458,9 @@
             // --- Carregar dados sincronizados ---
             document.getElementById('sobre-texto').textContent = localStorage.getItem('sobreContent') || document.getElementById('sobre-texto').textContent;
             renderProjects();
-            document.getElementById('faq').innerHTML = localStorage.getItem('faqContent') || document.getElementById('faq').innerHTML;
+            const faqContent = localStorage.getItem('faqContent');
+            if (faqContent) document.getElementById('faq').innerHTML = faqContent;
+
 
             // --- Sincronização com dashboard ---
             window.addEventListener('storage', (e) => {
