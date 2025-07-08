@@ -18,6 +18,8 @@
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
     <style>
         :root {
             --bg-dark: #0A0A0A;
@@ -53,8 +55,9 @@
         .light-mode .nav-link { color: var(--text-light); }
         .light-mode .nav-link:hover { color: var(--accent); }
         .light-mode .hero-overlay { background: rgba(247, 247, 247, 0.6); }
-        .light-mode .hero-content h1 { color: #1e3a8a; } /* Cor sólida para gradiente em light-mode */
-        .light-mode .hero-content p { color: var(--text-light); }
+        .light-mode .hero-content h1 { color: #1e3a8a; } 
+        .light-mode #descricao-container { color: var(--text-light); }
+        .light-mode .typed-cursor { color: var(--text-light); }
         .light-mode .project-card, .light-mode .faq-item, .light-mode .contact-form, .light-mode .modal-content { background-color: var(--card-light); border-color: var(--border-light); }
         .light-mode .filter-btn { background-color: #E5E7EB; color: #374151; }
         .light-mode .filter-btn.active { background-color: var(--accent); color: white; }
@@ -74,10 +77,19 @@
         /* --- Componentes e Animações --- */
         header { background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-dark); }
         .hero { min-height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .hero-video { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); z-index: -1; filter: brightness(0.6); }
-        .hero-overlay { position: absolute; inset: 0; background: transparent; z-index: 0; }
+        .hero-gif {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             object-fit: cover;
+             z-index: -2; /* Coloca atrás do overlay e do conteúdo */
+         }
+        .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: -1; }
         .hero-content { position: relative; z-index: 1; }
-        .hero-content h1 { text-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .hero-content h1 { text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        #descricao-container { min-height: 5rem; } /* Garante altura mínima para o texto que digita */
 
         .project-card { background-color: var(--card-dark); border: 1px solid var(--border-dark); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
         .project-card:hover {
@@ -101,8 +113,8 @@
         }
 
         /* --- FAQ --- */
-        details summary { list-style: none; } /* Remove a seta padrão */
-        details summary::-webkit-details-marker { display: none; } /* Remove a seta padrão no Chrome */
+        details summary { list-style: none; }
+        details summary::-webkit-details-marker { display: none; }
         details[open] summary ~ * { animation: fadeInContent 0.5s ease-out; }
         details[open] .faq-arrow { transform: rotate(180deg); }
         @keyframes fadeInContent { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -149,15 +161,21 @@
 
     <main>
         <section id="home" class="hero">
-            <video class="hero-video" autoplay muted loop playsinline>
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-wireframe-mesh-background-43382-large.mp4" type="video/mp4">
-                Seu navegador não suporta vídeos.
-            </video>
+            <img class="hero-gif" src="https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" alt="Fundo animado de programação" loading="lazy">
             <div class="hero-overlay"></div>
             <div class="hero-content container mx-auto px-6 text-center" data-aos="fade-up">
                 <h1 id="titulo" class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-br from-blue-400 to-cyan-400">Pedro Dias Pereira Neto</h1>
-                <p id="descricao" class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-10">Especialista em Tecnologia e Análise de Dados Transformando Ideias em Realidade Digital</p>
-                <a href="#contato" class="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-md font-semibold text-lg hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transform hover:scale-105">Entre em Contato</a>
+                
+                <p id="descricao-container" class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-10">
+                    <span id="descricao"></span>
+                </p>
+
+                <a href="#contato" class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-md font-semibold text-lg hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transform hover:scale-105">
+                    Entre em Contato
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                    </svg>
+                </a>
             </div>
         </section>
 
@@ -181,7 +199,7 @@
                     <button class="filter-btn px-4 py-2 rounded-md bg-neutral-800 hover:bg-neutral-700 transition text-sm font-medium" data-category="backend">Backend</button>
                 </div>
                 <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    </div>
+                </div>
             </div>
         </section>
 
@@ -279,38 +297,28 @@
             AOS.init({ once: true, duration: 600, offset: 50 });
             document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            // --- DADOS DOS PROJETOS (MODIFIQUE AQUI PARA ADICIONAR OS SEUS) ---
+            // --- INICIALIZAÇÃO DA ANIMAÇÃO DE DIGITAÇÃO ---
+            if (document.getElementById('descricao')) {
+                new Typed('#descricao', {
+                    strings: ['Especialista em Tecnologia.', 'Analista de Dados.', 'Transformando Ideias em Realidade Digital.'],
+                    typeSpeed: 50,
+                    backSpeed: 30,
+                    backDelay: 2000,
+                    startDelay: 500,
+                    loop: true,
+                    showCursor: true,
+                    cursorChar: '|',
+                });
+            }
+
+            // --- DADOS DOS PROJETOS ---
             let projects = JSON.parse(localStorage.getItem('projects')) || [
-                { 
-                    title: 'Plataforma de E-commerce', 
-                    description: 'Uma aplicação web completa e interativa construída com React e Tailwind CSS, otimizada para usabilidade e design moderno, com backend em Node.js.',
-                    category: 'web'
-                },
-                { 
-                    title: 'App de Fitness', 
-                    description: 'Um aplicativo mobile para monitoramento de atividades físicas, desenvolvido com Flutter, garantindo uma experiência fluida, responsiva e multiplataforma.',
-                    category: 'mobile' 
-                },
-                { 
-                    title: 'API para Análise de Dados', 
-                    description: 'Uma API RESTful robusta construída com Node.js e Express, integrada a um banco de dados MongoDB para processamento e análise de grandes volumes de dados.',
-                    category: 'backend'
-                },
-                { 
-                    title: 'Website Institucional Dinâmico', 
-                    description: 'Desenvolvimento de um site institucional moderno com sistema de gerenciamento de conteúdo (CMS) integrado para fácil atualização pelo cliente.',
-                    category: 'web'
-                },
-                { 
-                    title: 'Dashboard de BI', 
-                    description: 'Criação de um painel de Business Intelligence interativo para visualização de métricas de vendas, utilizando Power BI e uma API de dados dedicada.',
-                    category: 'backend'
-                },
-                { 
-                    title: 'App de Delivery', 
-                    description: 'Aplicativo de delivery completo para iOS e Android, com geolocalização em tempo real e sistema de pagamento integrado.',
-                    category: 'mobile' 
-                }
+                { title: 'Plataforma de E-commerce', description: 'Uma aplicação web completa e interativa construída com React e Tailwind CSS, otimizada para usabilidade e design moderno, com backend em Node.js.', category: 'web' },
+                { title: 'App de Fitness', description: 'Um aplicativo mobile para monitoramento de atividades físicas, desenvolvido com Flutter, garantindo uma experiência fluida, responsiva e multiplataforma.', category: 'mobile'  },
+                { title: 'API para Análise de Dados', description: 'Uma API RESTful robusta construída com Node.js e Express, integrada a um banco de dados MongoDB para processamento e análise de grandes volumes de dados.', category: 'backend' },
+                { title: 'Website Institucional Dinâmico', description: 'Desenvolvimento de um site institucional moderno com sistema de gerenciamento de conteúdo (CMS) integrado para fácil atualização pelo cliente.', category: 'web' },
+                { title: 'Dashboard de BI', description: 'Criação de um painel de Business Intelligence interativo para visualização de métricas de vendas, utilizando Power BI e uma API de dados dedicada.', category: 'backend' },
+                { title: 'App de Delivery', description: 'Aplicativo de delivery completo para iOS e Android, com geolocalização em tempo real e sistema de pagamento integrado.', category: 'mobile' }
             ];
 
             const projectGrid = document.getElementById('project-grid');
@@ -419,19 +427,12 @@
             const contactForm = document.getElementById('contact-form');
             const successMessage = document.getElementById('success-message');
             
-            // SUAS CREDENCIAIS FORAM INSERIDAS AQUI
             const SERVICE_ID = 'service_le204os';
             const TEMPLATE_ID = 'template_iylqvhk';
             const PUBLIC_KEY = 'YZ3lxv3ex1v9zZmXH';
 
             contactForm.addEventListener('submit', function(event) {
                 event.preventDefault();
-
-                // Verificação para garantir que as chaves não estão mais como placeholders
-                if (SERVICE_ID.includes('SEU_') || TEMPLATE_ID.includes('SEU_') || PUBLIC_KEY.includes('SUA_')) {
-                    alert('ERRO: Parece que as chaves do EmailJS não foram configuradas corretamente.');
-                    return;
-                }
                 
                 emailjs.init(PUBLIC_KEY);
 
